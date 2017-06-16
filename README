@@ -51,4 +51,5 @@
 
 
 5. Сплиттинг.
-  * Запуск Splitter.py; создание файлов:  /../data/result/words_with_border.csv
+  * Запуск Splitter.py; создание файлов:  /../data/data_for_splitting/words_with_vertex_all_info_len_%s.pkl
+                                         /../data/result/words_with_border.csv
