@@ -1,0 +1,54 @@
+1. Создание файлов с данными для компиляции автомата.
+ * Запуск DataPrepFST.py; создание файлов: /../data/data_for_compil/chars_pairs/part_morpho_for_fst.b
+                                           /../data/data_for_compil/chars_pairs/%s_part_morpho_for_fst.b
+
+ * Запуск AlphabetVocabFormer.py; создание файлов: /../data/data_for_compil/txtfst/russian_morphology_aot.txtfst
+                                                  /../data/data_for_compil/syms/russian_morphology_aot_abc.syms
+
+
+2. OpenFST.
+Компиляция:
+            fstcompile --isymbols=/../data/data_for_compil/syms/russian_morphology_aot_abc.syms
+                       --osymbols=/../data/data_for_compil/syms/russian_morphology_aot_abc.syms
+                       /../data/data_for_compil/txtfst/russian_morphology_aot.txtfst
+                       /../fst/bin/russian_morphology_aot.fst
+
+Статистика до минимизации:
+            fstinfo  /../fst/bin/russian_morphology_aot.fst > /../fst/stat/russian_morphology_aot.fst.info.txtfst
+
+Детерминизация:
+            fstdeterminize /../fst/bin/russian_morphology_aot.fst  /../fst/bin/russian_morphology_aot.determ.fst
+
+Минимизация:
+            fstminimize /../fst/bin/russian_morphology_aot.determ.fst /../fst/bin/russian_morphology_aot.determ.min.fst
+
+Стастика после минимизации:
+            fstinfo /../fst/bin/russian_morphology_aot.determ.min.fst > /../fst/stat//russian_morphology_aot.determ.min.info.txtfst
+
+Дамп:
+            fstprint
+            --isymbols=/../data/data_for_compil/syms/russian_morphology_aot_abc.syms
+            --osymbols=/../data/data_for_compil/syms/russian_morphology_aot_abc.syms
+            /../fst/bin/russian_morphology_aot.determ.min.fst > /../fst/dump/russian_morphology_aot.determ.min.dump.info.txtfst
+
+3. Выгрузка переходов и вершин из дампа автомат.
+ * Запуск DumpAcceptor.py; создание файлов:  /../data/data_from_fst/words_with_arcs.txt
+
+4. Создание данных для сплиттинга.
+ * Запуск VertexDegree.py; создание файлов: /../data/raw_data/vertex/degree.pkl
+                                           /../data/raw_data/vertex/states_with_peaks.pkl
+
+ * Запуск VertexPosWords.py; создание файлов: /../data/raw_data/vertex/vertex_unique_elements.pkl
+                                             /../data/raw_data/vertex//unique_vertex_with_positions_with_length_words.pkl
+
+ * Запуск VertexDegreeStat.py; создание файлов: /../data/raw_data/vertex_stata/count_letters_degree_info_in_sort.txt
+                                               /../data/raw_data/vertex_stata/letters_degree_info.txt
+                                               /../data/raw_data/vertex_stata/count_degree_info_out_sort.txt
+
+ * Запуск VertexFreq.py; создание файлов: /../data/raw_data/vertex/vertex_degree_pos_word_betw_info.pkl
+
+ * Запуск VertexFreqPos.py; создание файлов:  /../data/raw_data/vertex/vertex_degree_pos_word_info.pkl
+
+
+5. Сплиттинг.
+  * Запуск Splitter.py; создание файлов:  /../data/result/words_with_border.csv
