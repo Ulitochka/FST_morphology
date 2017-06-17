@@ -7,7 +7,7 @@ import csv
 import random
 
 
-WORD_LEN_THRESHOLD = [4, 5, 6, 7, 8, 9]
+WORD_LEN_THRESHOLD = [4, 5, 6, 7, 8]
 WORDS_WITH_BORDER = []
 
 file_path = os.path.split(os.path.abspath(__file__))[0]
@@ -82,7 +82,7 @@ def splitter(length_word):
     VERTEX_MAX_FREQ_POSITION_IN_WORD = 3
     VERTEX_FREQ = 100
 
-    with open(os.path.abspath(file_path + '/../data/data_from_fst/words_with_vertex_all_info_len_%s.pkl' % (str(length_word), )), 'rb') as f:
+    with open(os.path.abspath(file_path + '/../data/data_for_splitting/words_with_vertex_all_info_len_%s.pkl' % (str(length_word), )), 'rb') as f:
         words_with_vertex_all_info = pickle.load(f)
 
     for tokens in words_with_vertex_all_info:
@@ -117,7 +117,7 @@ def splitter(length_word):
         WORDS_WITH_BORDER.append([words[0], ''.join([el[0] for el in symbols_with_vertex])])
 
 for i in WORD_LEN_THRESHOLD:
-    data_prepare(i)
+    # data_prepare(i)
     splitter(i)
 
 random.shuffle(WORDS_WITH_BORDER)
