@@ -81,6 +81,7 @@ def splitter(length_word):
 
     VERTEX_MAX_FREQ_POSITION_IN_WORD = 3
     VERTEX_FREQ = 100
+    NUMBER_VERTEX = 2
 
     with open(os.path.abspath(file_path + '/../data/data_for_splitting/words_with_vertex_all_info_len_%s.pkl' % (str(length_word), )), 'rb') as f:
         words_with_vertex_all_info = pickle.load(f)
@@ -100,21 +101,21 @@ def splitter(length_word):
 
     for words in words_with_vertex_all_info:
         symbols_with_vertex = list(zip(list(words[0]), list(nltk.bigrams(words[1].split('-')))))
-        border_index = set()
+        word_with_border = []
         if words[-1] != []:
-            # берем вершину с максимальной частотой;
-            vertex_spl = [v for v in words[-1] if v[1] == max([vertex_split[1] for vertex_split in words[-1]])][0][0]
+            # берем n самых частотных вершин;
+            vertex_spl = sorted(words[-1], key=lambda x: x[-1], reverse=True)[:NUMBER_VERTEX]
             for s_v in symbols_with_vertex:
-                if vertex_spl == s_v[1][1]:
-                    border_index.add(symbols_with_vertex.index(s_v)+1)
-
-        if len(border_index) > 1:
-            assert(1==0)
-
-        for i in border_index:
-            symbols_with_vertex.insert(i, ('|',))
-        # print(words[0], ''.join([el[0] for el in symbols_with_vertex]), border_index)
-        WORDS_WITH_BORDER.append([words[0], ''.join([el[0] for el in symbols_with_vertex])])
+                symbol_border_check = s_v[0]
+                for v in vertex_spl:
+                    if v[0] == s_v[1][1]:
+                        symbol_border_check = symbol_border_check + '<'
+                    if v[0] == s_v[1][0]:
+                        symbol_border_check = '>' + symbol_border_check
+                word_with_border.append(symbol_border_check)
+        # print(words[0], ''.join(word_with_border))
+        if word_with_border != []:
+            WORDS_WITH_BORDER.append([words[0], ''.join(word_with_border)])
 
 for i in WORD_LEN_THRESHOLD:
     # data_prepare(i)
